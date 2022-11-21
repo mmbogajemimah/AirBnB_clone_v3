@@ -18,7 +18,7 @@ def retrive_cities(state_id):
     if not state:
         abort(404)
     for city in state.cities:
-        list_cities.append(city.to_dict())
+        cities_list.append(city.to_dict())
 
     return jsonify(cities_list)
 
@@ -85,7 +85,7 @@ def update_city(city_id):
     titles = ['id', 'state_id', 'created_at', 'updated_at']
 
     info = request.get_json()
-    for key, value in data.info():
+    for key, value in info.items():
         if key not in titles:
             setattr(city, key, value)
     storage.save()
