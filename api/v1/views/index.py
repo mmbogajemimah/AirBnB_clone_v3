@@ -20,11 +20,11 @@ def status_okay():
 @app_views.route('/stats', methods=['GET'], strict_slashes=False)
 def number_objects():
     """ Retrieves the number of each objects by type """
-    classes = [Amenity, City, Place, Review, State, User]
-    names = ["amenities", "cities", "places", "reviews", "states", "users"]
-
-    numberof_objects = {}
-    for i in range(len(classes)):
-        numberof_objects[names[i]] = storage.count(classes[i])
-
-    return jsonify(numberof_objects)
+    return jsonify({
+        'amenities': storage.count('Amenity'),
+        'cities': storage.count('City'),
+        'places': storage.count('Place'),
+        'reviews': storage.count('Review'),
+        'states': storage.count('State'),
+        'users': storage.count('User')
+    })
