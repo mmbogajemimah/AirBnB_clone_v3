@@ -1,5 +1,5 @@
 #!/usr/bin/python3
-""" objects that handle all default RestFul API actions for Places """
+"""Module that handles all default RestFul API actions for Places"""
 from models import storage
 from api.v1.views import app_views
 from flask import abort, jsonify, make_response, request
@@ -12,9 +12,9 @@ from models.place import Place
 
 @app_views.route('/cities/<city_id>/places', methods=['GET'],
                  strict_slashes=False)
-def retrive_places(city_id):
+def retrieve_places(city_id):
     """
-    Returns a list of places in a city
+    Returns a list of all places that match a given city
     """
     city = storage.get(City, city_id)
     if not city:
@@ -25,9 +25,9 @@ def retrive_places(city_id):
 
 
 @app_views.route('/places/<place_id>', methods=['GET'], strict_slashes=False)
-def retrive_place(place_id):
+def retrieve_place(place_id):
     """
-    Returns a Place object in a city
+    Returns a Place that matches the given ID
     """
     place = storage.get(Place, place_id)
     if not place:
@@ -40,7 +40,7 @@ def retrive_place(place_id):
                  strict_slashes=False)
 def remove_place(place_id):
     """
-    Removes info of a Place Object in a city with specific id
+    Deletes a place that matches the given ID
     """
 
     place = storage.get(Place, place_id)
@@ -58,7 +58,7 @@ def remove_place(place_id):
                  strict_slashes=False)
 def create_place(city_id):
     """
-    Creates a Place in a city with a specific id
+    Creates a Place in the city that matches the given id
     """
     city = storage.get(City, city_id)
 
@@ -68,28 +68,28 @@ def create_place(city_id):
     if not request.get_json():
         abort(400, description="Not a JSON")
 
-    if 'user_id' not in request.get_json():
+    data = request.get_json()
+    if 'user_id' not in data:
         abort(400, description="Missing user_id")
 
-    data = request.get_json()
     user = storage.get(User, data['user_id'])
 
     if not user:
         abort(404)
 
-    if 'name' not in request.get_json():
+    if 'name' not in data:
         abort(400, description="Missing name")
 
     data["city_id"] = city_id
-    instance = Place(**data)
-    instance.save()
-    return make_response(jsonify(instance.to_dict()), 201)
+    place_instance = Place(**data)
+    place_instance.save()
+    return make_response(jsonify(place_instance.to_dict()), 201)
 
 
 @app_views.route('/places/<place_id>', methods=['PUT'], strict_slashes=False)
 def update_place(place_id):
     """
-    Updates a Place using the PUT method
+    Updates a Place that matches the given id.
     """
     place = storage.get(Place, place_id)
 
