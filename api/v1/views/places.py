@@ -67,20 +67,23 @@ def create_place(city_id):
 
     if not request.get_json():
         abort(400, description="Not a JSON")
+
     if 'user_id' not in request.get_json():
         abort(400, description="Missing user_id")
 
-    info = request.get_json()
-    user = storage.get(User, info['user_id'])
+    data = request.get_json()
+    user = storage.get(User, data['user_id'])
 
     if not user:
         abort(404)
+
     if 'name' not in request.get_json():
         abort(400, description="Missing name")
-    info["city_id"] = city_id
-    place_inst = Place(**info)
-    place_inst.save()
-    return make_response(jsonify(place_inst.to_dict()), 201)
+
+    data["city_id"] = city_id
+    instance = Place(**data)
+    instance.save()
+    return make_response(jsonify(instance.to_dict()), 201)
 
 
 @app_views.route('/places/<place_id>', methods=['PUT'], strict_slashes=False)
