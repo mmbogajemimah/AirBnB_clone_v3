@@ -71,7 +71,7 @@ def create_place(city_id):
         abort(400, description="Missing user_id")
 
     info = request.get_json()
-    user = storage.get(User, data['user_id'])
+    user = storage.get(User, info['user_id'])
 
     if not user:
         abort(404)
