@@ -29,4 +29,4 @@ def not_found(error):
 
 if __name__ == "__main__":
     """Main app to run from console"""
-    app.run(host=host, port=5000, threaded=True)
+    app.run(host=host, port=port, threaded=True)
